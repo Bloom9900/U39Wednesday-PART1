@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
+import entities.Address;
 import entities.Person;
 import exceptions.PersonNotFoundException;
 import utils.EMF_Creator;
@@ -71,7 +72,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String addPerson(String person) {
         PersonDTO p = gson.fromJson(person, PersonDTO.class);
-        PersonDTO pNew = facade.addPerson(p.getfName(), p.getlName(), p.getPhone());
+        PersonDTO pNew = facade.addPerson(p.getfName(), p.getlName(), p.getPhone(), p.getStreet(), p.getZip(), p.getCity());
         return gson.toJson(pNew);
     }
 }

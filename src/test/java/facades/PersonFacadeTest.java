@@ -2,6 +2,7 @@ package facades;
 
 import dto.PersonDTO;
 import dto.PersonsDTO;
+import entities.Address;
 import utils.EMF_Creator;
 import entities.Person;
 import exceptions.PersonNotFoundException;
@@ -28,6 +29,7 @@ public class PersonFacadeTest {
     private static Person p1 = new Person("Jannich", "Højmose", "23656270");
     private static Person p2 = new Person("Sebastian", "Vangkilde", "59841532");
     private static Person p3 = new Person("Casper", "Jensen", "98451254");
+    private static Address a1 = new Address("Egevangen 4", 3540, "Vassingerød");
 
     public PersonFacadeTest() {
     }
@@ -67,7 +69,7 @@ public class PersonFacadeTest {
     @Test
     public void testAddPerson() {
         PersonDTO expected = new PersonDTO(p3);
-        PersonDTO result = facade.addPerson(p3.getFirstName(), p3.getLastName(), p3.getPhone());
+        PersonDTO result = facade.addPerson(p3.getFirstName(), p3.getLastName(), p3.getPhone(), a1.getStreet(), a1.getZip(), a1.getCity());
         assertEquals(expected.getPhone(), result.getPhone());
     }
     
