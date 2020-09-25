@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import entities.Person;
+import exceptions.MissingInputException;
 import exceptions.PersonNotFoundException;
 import utils.EMF_Creator;
 import facades.PersonFacade;
@@ -60,10 +61,9 @@ public class PersonResource {
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String editPerson(@PathParam("id") int id, String person) throws PersonNotFoundException {
+    public String editPerson(@PathParam("id") int id, String person) throws PersonNotFoundException, MissingInputException {
         PersonDTO p = gson.fromJson(person, PersonDTO.class);
-        return gson.toJson(facade.editPerson(p));
-        
+        return gson.toJson(facade.editPerson(p));   
     }
     
     @POST

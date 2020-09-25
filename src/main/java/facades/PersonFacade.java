@@ -3,13 +3,11 @@ package facades;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Person;
+import exceptions.MissingInputException;
 import exceptions.PersonNotFoundException;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 public class PersonFacade implements IPersonFacade {
 
@@ -38,7 +36,10 @@ public class PersonFacade implements IPersonFacade {
     }
 
     @Override
-    public PersonDTO addPerson(String fName, String lName, String phone) {
+    public PersonDTO addPerson(String fName, String lName, String phone) throws MissingInputException {
+        if(fName.length() == 0 || lName.length() == 0) {
+            throw new MissingInputException("First Name and/or Last Name is missing");
+        }
         EntityManager em = emf.createEntityManager();
         Person person = new Person(fName, lName, phone);
         try {
@@ -95,14 +96,18 @@ public class PersonFacade implements IPersonFacade {
         }
     }
 
-    public PersonDTO editPerson(PersonDTO p) throws PersonNotFoundException {
+    @Override
+    public PersonDTO editPerson(PersonDTO p) throws PersonNotFoundException, MissingInputException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Person person = em.find(Person.class, p.getId());
             if (person == null) {
                 throw new PersonNotFoundException(String.format("Person with id: (%d) not found", p.getId()));
-            } else {
+            } else if(p == null) {
+                throw new MissingInputException("First Name and/or Last Name is missing");
+            }
+            else {
                 person.setFirstName(p.getfName());
                 person.setLastName(p.getlName());
                 person.setPhone(p.getPhone());
