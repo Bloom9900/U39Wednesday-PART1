@@ -69,7 +69,7 @@ public class PersonResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String addPerson(String person) {
+    public String addPerson(String person) throws MissingInputException {
         PersonDTO p = gson.fromJson(person, PersonDTO.class);
         PersonDTO pNew = facade.addPerson(p.getfName(), p.getlName(), p.getPhone());
         return gson.toJson(pNew);

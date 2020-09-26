@@ -1,11 +1,13 @@
 package rest;
 
+import dto.PersonDTO;
 import entities.Person;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -13,7 +15,10 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,15 +97,31 @@ public class PersonResourceTest {
         .body("msg", equalTo("Hello World"));   
     }
     
-//    @Test
-//    public void testCount() throws Exception {
-//        given()
-//        .contentType("application/json")
-//        .get("/xxx/count").then()
-//        .assertThat()
-//        .statusCode(HttpStatus.OK_200.getStatusCode())
-//        .body("count", equalTo(2));   
-//    }
+    @Test
+    public void testGetAllPersons() throws Exception {
+        List<PersonDTO> personsDTO = null;
+        given()
+                .contentType("application/json")
+                .get("/person/all").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .extract().body().jsonPath().getList("all", PersonDTO.class);
+        PersonDTO p1DTO = new PersonDTO(p1);
+        PersonDTO p2DTO = new PersonDTO(p2);
+        PersonDTO p3DTO = new PersonDTO(p3);
+        
+        assertThat(personsDTO, containsInAnyOrder(p1DTO, p2DTO, p3DTO));
+    }
+    
+    @Test
+    public void testGetPerson() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/person/all").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("fName", equalTo("Jannich"));
+    }
     
 //    @Test
 //    public void testPersonNotFoundException() throws Exception {

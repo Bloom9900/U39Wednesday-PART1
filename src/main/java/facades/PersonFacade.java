@@ -115,7 +115,6 @@ public class PersonFacade implements IPersonFacade {
             }
             em.getTransaction().commit();
             return new PersonDTO(person);
-
         } finally {
             em.close();
         }

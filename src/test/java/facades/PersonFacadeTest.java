@@ -4,17 +4,17 @@ import dto.PersonDTO;
 import dto.PersonsDTO;
 import utils.EMF_Creator;
 import entities.Person;
+import exceptions.MissingInputException;
 import exceptions.PersonNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,10 +65,17 @@ public class PersonFacadeTest {
     }
     
     @Test
-    public void testAddPerson() {
+    public void testAddPerson() throws MissingInputException {
         PersonDTO expected = new PersonDTO(p3);
         PersonDTO result = facade.addPerson(p3.getFirstName(), p3.getLastName(), p3.getPhone());
         assertEquals(expected.getPhone(), result.getPhone());
+    }
+    
+    @Test
+    public void testDeletePerson() throws PersonNotFoundException {
+        PersonDTO expected = new PersonDTO(p2);
+        PersonDTO result = facade.deletePerson(p2.getId());
+        assertEquals(expected, result);
     }
     
     @Test
@@ -77,22 +84,25 @@ public class PersonFacadeTest {
         PersonDTO result = facade.getPerson(p2.getId());
         assertEquals(expected.getPhone(), result.getPhone());
     }
-//    
-//    @Test
-//    public void testDeletePerson() {
-//        facade.deletePerson(p1.getId());
-//        assertThat();
-//    }
     
-//    @Test
-//    public void testGetAllPersons() {
-//        List<Person> persons = new ArrayList();
-//        persons.add(p1);
-//        persons.add(p2);
-//        persons.add(p3);
-//        PersonsDTO expected = new PersonsDTO(persons);
-//        PersonsDTO result = facade.getAllPersons();
-//        assertEquals(expected, result);        
-//    }
-
+    @Test
+    public void testGetAllPersons() {
+        int expResult = 3;
+        PersonsDTO result = facade.getAllPersons();
+        assertEquals(expResult, result.getAll().size());
+        PersonDTO p1DTO = new PersonDTO(p1);
+        PersonDTO p2DTO = new PersonDTO(p2);
+        PersonDTO p3DTO = new PersonDTO(p3);
+        assertThat(result.getAll(), Matchers.containsInAnyOrder(p1DTO, p2DTO, p3DTO));
+    }
+    
+    @Test
+    public void testEditPerson() throws PersonNotFoundException, MissingInputException {
+        PersonDTO p = new PersonDTO(p1);
+        PersonDTO expected = new PersonDTO(p1);
+        expected.setfName("Kasper");
+        p.setfName("Kasper");
+        PersonDTO result = facade.editPerson(p);
+        assertEquals(expected.getfName(), result.getfName());
+    }
 }
