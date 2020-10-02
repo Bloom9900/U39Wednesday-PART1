@@ -2,9 +2,8 @@ package facades;
 
 import dto.PersonDTO;
 import dto.PersonsDTO;
-import entities.Address;
+import entities.*;
 import utils.EMF_Creator;
-import entities.Person;
 import exceptions.PersonNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
