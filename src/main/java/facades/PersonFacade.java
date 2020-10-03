@@ -37,7 +37,7 @@ public class PersonFacade implements IPersonFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+
     @Override
     public PersonDTO addPerson(String fName, String lName, String phone, String street, int zip, String city) {
         EntityManager em = emf.createEntityManager();
@@ -49,7 +49,7 @@ public class PersonFacade implements IPersonFacade {
             query.setParameter("zip", zip);
             query.setParameter("city", city);
             List<Address> addresses = query.getResultList();
-            if(addresses.size() > 0) {
+            if (addresses.size() > 0) {
                 person.setAddress(addresses.get(0));
             } else {
                 person.setAddress(new Address(street, zip, city));
