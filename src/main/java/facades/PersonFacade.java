@@ -87,13 +87,12 @@ public class PersonFacade implements IPersonFacade {
 
     @Override
     public PersonsDTO getAllPersons() {
-        EntityManager em = emf.createEntityManager();
+      EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT p FROM Person p");
-            return new PersonsDTO(query.getResultList());
-        } finally {
+            return new PersonsDTO(em.createNamedQuery("Person.getAllRows").getResultList());
+        } finally{  
             em.close();
-        }
+        }   
     }
 
     @Override

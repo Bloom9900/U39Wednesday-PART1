@@ -52,5 +52,4 @@ public class PersonDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
 }
