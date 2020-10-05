@@ -87,15 +87,15 @@ public class PersonFacadeTest {
         assertEquals(expected.getPhone(), result.getPhone());
     }
     
-//    @Test
-//    public void testGetAllPersons() {
-//        int expResult = 2;
-//        PersonsDTO result = facade.getAllPersons();
-//        assertEquals(expResult, result.getAll().size());
-//        PersonDTO p1DTO = new PersonDTO(p1);
-//        PersonDTO p2DTO = new PersonDTO(p2);
-//        assertThat(result.getAll(), containsInAnyOrder(p1DTO, p2DTO));
-//    }
+    @Test
+    public void testGetAllPersons() {
+        int expResult = 2;
+        PersonsDTO result = facade.getAllPersons();
+        assertEquals(expResult, result.getAll().size());
+        PersonDTO p1DTO = new PersonDTO(p1);
+        PersonDTO p2DTO = new PersonDTO(p2);
+        assertThat(result.getAll(), containsInAnyOrder(p1DTO, p2DTO));
+    }
     
     @Test
     public void testEditPerson() throws PersonNotFoundException, MissingInputException {
