@@ -44,7 +44,7 @@ public class EMF_Creator {
             String user = System.getenv("USER");
             String pw = System.getenv("PW");
             //String connection_str = System.getenv("CONNECTION_STR");
-            String connection_str = System.getenv("PERSON_CONNECTION_STRcd ");
+            String connection_str = System.getenv("PERSON_CONNECTION_STR");
             Properties props = new Properties();
             props.setProperty("javax.persistence.jdbc.user", user);
             props.setProperty("javax.persistence.jdbc.password", pw);
