@@ -12,6 +12,13 @@ public class PersonsDTO {
         personEntities.forEach((p) -> {
             all.add(new PersonDTO(p));
         });
+    }
+    
+    public List<PersonDTO> getAll() {
+        return all;
+    }
 
+    public void setAll(List<PersonDTO> all) {
+        this.all = all;
     }
 }

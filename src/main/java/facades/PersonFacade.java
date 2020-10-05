@@ -4,6 +4,7 @@ import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Address;
 import entities.Person;
+import exceptions.MissingInputException;
 import exceptions.PersonNotFoundException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,7 +40,10 @@ public class PersonFacade implements IPersonFacade {
     }
 
     @Override
-    public PersonDTO addPerson(String fName, String lName, String phone, String street, int zip, String city) {
+    public PersonDTO addPerson(String fName, String lName, String phone, String street, String zip, String city) throws MissingInputException {
+        if (fName.length() == 0 || lName.length() == 0) {
+            throw new MissingInputException("First Name and/or Last Name is missing");
+        }
         EntityManager em = emf.createEntityManager();
         Person person = new Person(fName, lName, phone);
         try {
@@ -56,10 +60,10 @@ public class PersonFacade implements IPersonFacade {
             }
             em.persist(person);
             em.getTransaction().commit();
-            return new PersonDTO(person);
         } finally {
             em.close();
         }
+        return new PersonDTO(person);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class PersonFacade implements IPersonFacade {
         try {
             Person person = em.find(Person.class, id);
             if (person == null) {
-                throw new PersonNotFoundException(String.format("Person with id: (%d) not found", id));
+                throw new PersonNotFoundException(String.format("No person with provided id: %d found", id));
             } else {
                 return new PersonDTO(person);
             }
@@ -97,22 +101,24 @@ public class PersonFacade implements IPersonFacade {
 
     @Override
     public PersonsDTO getAllPersons() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT p FROM Person p");
-            return new PersonsDTO(query.getResultList());
+            return new PersonsDTO(em.createNamedQuery("Person.getAllRows").getResultList());
         } finally {
             em.close();
         }
     }
 
-    public PersonDTO editPerson(PersonDTO p) throws PersonNotFoundException {
+    @Override
+    public PersonDTO editPerson(PersonDTO p) throws PersonNotFoundException, MissingInputException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Person person = em.find(Person.class, p.getId());
             if (person == null) {
                 throw new PersonNotFoundException(String.format("Person with id: (%d) not found", p.getId()));
+            } else if (p == null) {
+                throw new MissingInputException("First Name and/or Last Name is missing");
             } else {
                 person.setFirstName(p.getfName());
                 person.setLastName(p.getlName());
@@ -121,7 +127,6 @@ public class PersonFacade implements IPersonFacade {
             }
             em.getTransaction().commit();
             return new PersonDTO(person);
-
         } finally {
             em.close();
         }

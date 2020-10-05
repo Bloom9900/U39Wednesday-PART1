@@ -2,14 +2,16 @@ package dto;
 
 import entities.Address;
 import entities.Person;
+import java.util.Objects;
 
 public class PersonDTO {
+
     private int id;
     private String fName;
     private String lName;
     private String phone;
     private String street;
-    private int zip;
+    private String zip;
     private String city;
 
     public PersonDTO(Person p) {
@@ -17,9 +19,11 @@ public class PersonDTO {
         this.lName = p.getLastName();
         this.phone = p.getPhone();
         this.id = p.getId();
-        this.street = p.getAddress().getStreet();
-        this.zip = p.getAddress().getZip();
-        this.city = p.getAddress().getCity();
+        if (p.getAddress() != null) {
+            this.street = p.getAddress().getStreet();
+            this.zip = p.getAddress().getZip();
+            this.city = p.getAddress().getCity();
+        }
     }
 
     public int getId() {
@@ -62,11 +66,11 @@ public class PersonDTO {
         this.street = street;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
@@ -76,6 +80,48 @@ public class PersonDTO {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PersonDTO other = (PersonDTO) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.fName, other.fName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lName, other.lName)) {
+            return false;
+        }
+        if (!Objects.equals(this.phone, other.phone)) {
+            return false;
+        }
+        if (!Objects.equals(this.street, other.street)) {
+            return false;
+        }
+        if (!Objects.equals(this.zip, other.zip)) {
+            return false;
+        }
+        if (!Objects.equals(this.city, other.city)) {
+            return false;
+        }
+        return true;
     }
     
     

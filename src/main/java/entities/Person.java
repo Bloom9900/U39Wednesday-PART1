@@ -8,17 +8,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 @Entity
-@NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person")
+@NamedQueries({
+@NamedQuery(name = "Person.deleteAllRows", query = "DELETE FROM Person"),
+@NamedQuery(name = "Person.getAllRows", query = "SELECT p FROM Person p")})
 public class Person implements Serializable {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
     private String firstName;

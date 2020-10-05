@@ -18,7 +18,7 @@ public class Address implements Serializable {
     private Long id;
     
     private String  street;
-    private int zip;
+    private String zip;
     private String city;
     
     @OneToMany(mappedBy = "address")
@@ -27,7 +27,7 @@ public class Address implements Serializable {
     public Address() {
     }
 
-    public Address(String street, int zip, String city) {
+    public Address(String street, String zip, String city) {
         this.street = street;
         this.zip = zip;
         this.city = city;
@@ -56,11 +56,11 @@ public class Address implements Serializable {
         this.street = street;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
